@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Biblioteca do Aluno</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/aluno.css') }}">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+  <div class="header">Biblioteca do Aluno</div>
+  <div class="profile-toggle" onclick="toggleProfile()">
+    <ion-icon name="person-circle-outline"></ion-icon> Ver Perfil do Usuário
+    <ion-icon name="chevron-down-outline" class="toggle-icon" id="toggleIcon"></ion-icon>
+  </div>
+
+  <div class="profile-section" id="profileSection">
+    <div class="profile-column">
+      <h3><ion-icon name="person-circle-outline"></ion-icon> Informações do Usuário</h3>
+      <p><strong>Email:</strong> {{ usuario.email }}</p>
+      <p><strong>ID:</strong> {{ usuario.id }}</p>
+      <p><strong>Tipo:</strong> {{ usuario.tipo }}</p>
+    </div>
+  
+    <div class="profile-column">
+      <h3><ion-icon name="book-outline"></ion-icon> Livros em Empréstimo</h3>
+      <ul id="emprestimos">
+        {% for id_emprestimo, titulo, data_devolucao, renovacoes in emprestimos %}
+        <li>
+          {{ titulo }} - devolver até <span class="data">{{ data_devolucao }}</span>
+          <div class="action-buttons">
+            <button onclick="renovar('{{ id_emprestimo }}', this)" {% if renovacoes >= 2 %}disabled{% endif %}>Renovar</button>
+            <button onclick="devolver('{{ id_emprestimo }}', this)">Devolver</button>
+          </div>
+        </li>
+      {% else %}
+        <li>Sem empréstimos no momento.</li>
+      {% endfor %}
+      </ul>
+    </div>
+  
+    <div class="profile-column">
+      <h3><ion-icon name="time-outline"></ion-icon> Cronologia de Empréstimos</h3>
+      <ul id="cronologia">
+        {% for titulo, data_emprestimo, data_devolucao in historico %}
+        <li>{{ titulo }} - {{ data_emprestimo }} até {{ data_devolucao }}</li>
+        {% else %}
+        <li>Sem histórico de empréstimos.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>  
+
+  <div class="content">
+    <div class="search-bar">
+      <ion-icon name="search-outline" style="font-size: 20px; margin-right: 10px; color: white;"></ion-icon>
+      <input type="text" placeholder="Pesquisar por título, autor ou gênero" id="searchInput">
+    </div>
+
+    <div class="book-list">
+      {% for id_livro, titulo, autor, ano, descricao, genero, imagem, status in livros %}
+      <div class="book-box">
+        <div class="white-box">
+          <img src="{{ imagem }}" alt="{{ titulo }}">
+          <div class="book-info">
+            <h3>{{ titulo }}</h3>
+            <p><strong>Autor:</strong> {{ autor }}</p>
+            <p><strong>Ano:</strong> {{ ano }}</p>
+            <p><strong>Descrição:</strong> {{ descricao }}</p>
+            <p><strong>Gênero:</strong> {{ genero }}</p>
+            <p class="status {{ 'available' if status == 'disponivel' else 'unavailable' }}">
+              <span class="dot"></span>
+              {{ 'Disponível' if status == 'disponivel' else 'Não disponível' }}
+            </p>
+                    {% if status == 'disponivel' %}
+                      <button class="solicitar-btn" data-id="{{ id_livro }}" data-titulo="{{ titulo }}">Solicitar Empréstimo</button>
+                    {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+
+  </div>
+
+  <div class="footer">© 2025 Biblioteca Escolar</div>
+
+  <script src="{{ url_for('static', filename='js/aluno.js') }}"></script>
+
+</body>
+</html>
