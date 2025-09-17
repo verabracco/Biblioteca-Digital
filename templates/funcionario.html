@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestão de Biblioteca - Funcionário</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/aluno.css') }}">
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</head>
+<body>
+  <div class="header">Painel do Funcionário</div>
+
+  <div class="content">
+    <div style="margin-bottom: 30px;">
+      <button onclick="abrirFormularioNovoLivro()" style="padding: 10px 20px; border-radius: 20px; font-size: 16px; background-color: #331900; color: white;">➕ Adicionar Livro</button>
+    </div>
+
+    <div class="book-list">
+      {% for id_livro, titulo, autor, ano, descricao, genero, imagem, status in livros %}
+      <div class="book-box">
+        <div class="white-box">
+          <img src="{{ imagem }}" alt="{{ titulo }}">
+          <div class="book-info">
+            <h3>{{ titulo }}</h3>
+            <p><strong>Autor:</strong> {{ autor }}</p>
+            <p><strong>Ano:</strong> {{ ano }}</p>
+            <p><strong>Descrição:</strong> {{ descricao }}</p>
+            <p><strong>Gênero:</strong> {{ genero }}</p>
+            <p class="status {{ 'available' if status == 'disponivel' else 'unavailable' }}">
+              <span class="dot"></span>
+              {{ 'Disponível' if status == 'disponivel' else 'Emprestado' }}
+            </p>
+            <div class="action-buttons">
+              {% if status == 'disponivel' %}
+              <button onclick="editarLivro('{{ id_livro }}')">Editar</button>
+              <button onclick="removerLivro('{{ id_livro }}')">Remover</button>
+              {% endif %}
+              {% if status != 'disponivel' %}
+                <button onclick="verInfoEmprestimo('{{ id_livro }}')">Ver Informações do Empréstimo</button>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="footer">© 2025 Biblioteca Escolar</div>
+
+  <!-- Modal de Adição de Livro -->
+    <div id="formLivro" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalLivro()">&times;</span>
+        <h2>Adicionar Novo Livro</h2>
+        <form id="formNovoLivro">
+        <input type="text" name="titulo" placeholder="Título" required>
+        <input type="text" name="autor" placeholder="Autor" required>
+        <input type="text" name="ano" placeholder="Ano">
+        <input type="text" name="genero" placeholder="Gênero">
+        <input type="text" name="imagem" placeholder="URL da Imagem">
+        <textarea name="descricao" placeholder="Descrição" rows="4"></textarea>
+        <button type="submit">Salvar Livro</button>
+        </form>
+    </div>
+    </div>
+
+    <!-- Modal para ver informações do empréstimo -->
+    <div id="modalEmprestimo" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="fecharModalEmprestimo()">&times;</span>
+        <h2>Informações do Empréstimo</h2>
+        <p><strong>Aluno:</strong> <span id="nomeAluno"></span></p>
+        <p><strong>Data de Retirada:</strong> <span id="dataRetirada"></span></p>
+        <p><strong>Data de Devolução Prevista:</strong> <span id="dataDevolucao"></span></p>
+    </div>
+    </div>
+
+  <script src="{{ url_for('static', filename='js/funcionario.js') }}"></script>
+</body>
+</html>

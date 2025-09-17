@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Biblioteca Escolar</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/index.css') }}">
+</head>
+<body>
+  <div class="header">Biblioteca Escolar</div>
+
+  <div class="main">
+    <!-- Bemvindo -->
+    <div class="container fade-slide show" id="welcome-container">
+      <h2>Bem-vindo!</h2>
+      <p>Escolha seu perfil para acessar a biblioteca:</p>
+      <button class="button" onclick="showLogin('Aluno')">Aluno</button>
+      <button class="button" onclick="showLogin('Funcionario')">Funcionário</button>
+    </div>
+
+    <!-- Login -->
+    <div class="wrapper fade-slide" id="login-container">
+      <div class="icon-close" onclick="closeLogin()">&times;</div>
+      <div class="form-box login">
+        <h2 id="login-title">Login</h2>
+        <form id="login-form" action="#">
+          <div class="input-box">
+            <input type="email" required>
+            <label>Email</label>
+            <span class="icon"><ion-icon name="mail"></ion-icon></span>
+          </div>
+          <div class="input-box">
+            <input type="password" required>
+            <label>Senha</label>
+            <span class="icon"><ion-icon name="lock-closed"></ion-icon></span>
+          </div>
+          <div class="remember-forgot">
+            <label><input type="checkbox"> Lembrar-me</label>
+            <a href="#">Esqueceu a senha?</a>
+          </div>
+          <button type="submit" class="btn">Entrar</button>
+          <div id="login-error" style="color: #ff4d4d; margin-top: 10px; display: none;"></div>
+          <div class="login-register">
+            Não tem uma conta? <a href="/registro">Registre-se</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">© 2025 Biblioteca Escolar</div>
+
+  <!-- Ionicons -->
+  <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+
+  <script src="{{ url_for('static', filename='js/index.js') }}"></script>
+</script>
+</body>
+</html>
